@@ -1,0 +1,501 @@
+<html>
+<header>
+<style>
+    @font-face {
+      font-family: 'Digital';
+      src: url('assets/digital-7.regular.ttf') format('truetype');
+    }
+    body { font-family: “sans-serif” }
+
+    .main {
+        border-radius: 50%;
+        width: 500px;
+        height: 500px;
+        background-color: rgb(17,19,23);
+        border: solid 10px rgb(197,239,253);
+        position: absolute;
+        top:  50%;
+        left: 50%;
+        transform: translate(-50%,-50%);
+        user-select: none;
+    }
+    
+    .refrigerator-temperature {
+        font-family: "Digital";
+        font-style: italic;
+        color: rgb(171, 205, 217);
+        position: absolute;
+        left: 210px;
+        top: 110px;        
+    }
+
+    .freezer-humidity {
+        font-family: "Digital";
+        font-style: italic;
+        color: rgb(100, 144, 153);
+        position: absolute;
+        left: 150px;
+        top: 40px;
+    }
+    
+    .refrigerator-humidity {
+        font-family: "Digital";
+        font-style: italic;
+        color: rgb(100, 144, 153);
+        position: absolute;
+        right: 130px;
+        top: 40px;
+    }
+    
+    .freezer-temperature {
+        font-family: "Digital";
+        font-style: italic;
+        color: rgb(100, 144, 153);
+        position: absolute;
+        left: 40px;
+        top: 160px;
+    }
+    
+    .room-temperature {
+        font-family: "Digital";
+        font-style: italic;
+        color: rgb(100, 144, 153);
+        position: absolute;
+        right: 35px;
+        top: 160px;
+    }
+    
+    .display-label {
+        font-family: "Helvetica";
+        opacity: 0.7; 
+        font-size: smaller; 
+        font-style: normal;
+    }
+    
+    .config-icon {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .number {
+        font-size: 64px;
+    }
+    
+    .unit {
+        font-size: 18px;
+        vertical-align: top;
+    }
+    
+    .number-s {
+        font-size: 32px;
+    }
+    
+    .unit-s {
+        font-size: 14px;
+        vertical-align: top;
+    }
+
+    .number-l {
+        font-size: 118px;
+    }
+    
+    .unit-l {
+        font-size: 28px;
+        vertical-align: top;
+    }
+
+    .food-display-container {
+        position: absolute;
+        bottom: 50px;
+        left: 50%;
+        transform: translate(-50%,0);
+        height: 200px;
+        width: 400px;
+        display: flex;
+        flex-flow: column wrap;
+    }
+    
+    .food-row {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        margin: 20px 0;
+    }
+    
+    .food-item {
+        display: flex;
+        height: 28px;
+        width: 80px;
+    }
+    
+    .food-icon {
+        height: 40px;  
+        width: 30px;  
+        margin-right: 20px;
+    }
+    
+    .food-quantity {
+        display: flex;
+        width: 30px;
+        position: relative;
+    }
+    
+    .quantity-bar-1 {
+        background-color: rgb(100, 144, 153);
+        width: 3px;
+        height: 5px;
+        position: absolute;
+        bottom: 4px;
+        left: 0;
+    }
+    
+    .quantity-bar-2 {
+        background-color: rgb(100, 144, 153);
+        width: 3px;
+        height: 10px;
+        position: absolute;
+        bottom: 4px;
+        left: 7;
+    }
+
+    .quantity-bar-3 {
+        background-color: rgb(100, 144, 153);
+        width: 3px;
+        height: 15px;
+        position: absolute;
+        bottom: 4px;
+        left: 14;
+    }
+
+    .quantity-bar-4 {
+        background-color: rgb(100, 144, 153);
+        width: 3px;
+        height: 20px;
+        position: absolute;
+        bottom: 4px;
+        left: 21;
+    }
+
+    .swipe-for-settings {
+        position: absolute;
+        bottom: 65px;
+        left: 50%;
+        transform: translate(-50%,0);
+        font-size: 20px;
+        background: linear-gradient(to left, #eee, #566);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    
+    #display {
+        z-index: 1;
+    }
+    
+    .center-align {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%,0);        
+    }
+    
+    .temperature-carousel {
+        font-family: "Digital";
+        font-style: italic;
+        min-width: 250px;
+    }
+    
+    #refrigerator-config {
+        top: 50px;
+        color: rgb(178,204,216);
+    }
+    .refrigerator-temperature-large {
+        font-size: 96px;
+        vertical-align: middle;
+        min-width: 46px;
+        display: inline-block;
+    }
+    .refrigerator-temperature-medium {
+        font-size: 48px;
+        vertical-align: middle;
+        margin-left: 20px;
+        margin-right: 20px;
+        opacity: 0.5;
+        min-width: 23px;
+        display: inline-block;
+    }
+    .refrigerator-temperature-small {
+        font-size: 32px;
+        vertical-align: middle;
+        opacity: 0.2;
+        min-width: 15px;
+        display: inline-block;
+    }
+    
+    #refrigerator-temperature-label {
+        top: 135px;
+        color: rgb(100, 144, 153);
+        font-size: 14px;
+    }
+    
+    #freezer-config {
+        top: 190px;
+        color: rgb(100, 144, 153);
+    }
+    .freezing-temperature-large {
+        font-size: 48px;
+        vertical-align: middle;
+        min-width: 50px;
+        display: inline-block;
+    }
+    .freezing-temperature-medium {
+        font-size: 32px;
+        vertical-align: middle;
+        margin-left: 20px;
+        margin-right: 20px;
+        opacity: 0.5;
+        min-width: 21px;
+        display: inline-block;
+    }
+    .freezing-temperature-small {
+        font-size: 24px;
+        vertical-align: middle;
+        opacity: 0.2;
+        min-width: 16px;
+        display: inline-block;
+    }
+    
+    #freezing-temperature-label {
+        top: 240px;
+        color: rgb(100, 144, 153);
+        font-size: 14px;
+    }
+
+    #freezing {
+        top: 320px;
+        left: 91px;        
+    }
+    
+    #ice-making {
+        top: 320px;
+        left: 203px;        
+    }
+    
+    #sanitizing {
+        top: 320px;
+        left: 315px;                
+    }
+
+    .button {
+        position: absolute;
+    }
+    
+    .icon {
+        width: 32px;
+        height: 32px;
+        vertical-align: middle;
+    }
+    
+    .button-text {
+        font-size: 12px;
+        color: rgb(100, 144, 153);
+        margin-left: 10px;
+        vertical-align: middle;
+    }
+</style>
+
+    <script>
+        window.refrigeratorTemperature = 4;
+        window.freezerTemperature = -14;
+        
+        function updateRefrigeratorTemperature(diff) {
+            window.refrigeratorTemperature += diff;
+            let refrigeratorCarousel = document.getElementById('refrigerator-config');
+            for (var i = -2; i <= 0; i++) {
+                refrigeratorCarousel.children[i+2].innerText =
+                    refrigeratorTemperature + i < 0 ? " " : refrigeratorTemperature + i;
+            }
+            for (var i = 1; i <= 2; i++) {
+                refrigeratorCarousel.children[i+3].innerText =
+                    refrigeratorTemperature + i > 9 ? " " : refrigeratorTemperature + i;
+            }
+            document.getElementsByClassName('refrigerator-temperature')[0].children[0].innerText =
+                refrigeratorTemperature;
+        }
+        
+        function updateFreezerTemperature(diff) {
+            window.freezerTemperature += diff;
+            let freezerCarousel = document.getElementById('freezer-config');
+            for (var i = -2; i < 0; i++) {
+                freezerCarousel.children[i+2].innerText = 
+                    freezerTemperature + i < -19 ? " " : Math.abs(freezerTemperature + i);
+            }
+            freezerCarousel.children[2].innerText = freezerTemperature;
+            for (var i = 1; i <= 2; i++) {
+                freezerCarousel.children[i+3].innerText =
+                    freezerTemperature + i > -10 ? " " : Math.abs(freezerTemperature + i);
+            }
+            document.getElementsByClassName('freezer-temperature')[0].children[0].innerText =
+                freezerTemperature;
+        }
+    </script>
+        
+</header>
+<body>
+    <div id="display" class="main">
+        <div class="refrigerator-temperature">
+            <span class="number-l">4</span>
+            <span class="unit-l" style="font-family: Helvetica">&nbsp;&nbsp;&#8451</span>
+            <div style="margin-left: -25px; margin-top: -35px;">
+                <img src="assets/refrigerator.png" class="config-icon">
+            </div>
+            <div class="display-label"
+                 style="margin-left: 5px; margin-top: 5px; font-size: normal">
+                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reefer<br>&nbsp;&nbsp;Temperature
+             </div>
+        </div>
+        <div class="freezer-humidity">
+            <span class="number-s">24</span>
+            <span class="unit-s" style="font-family: Helvetica">&nbsp;%</span>
+            <div style="margin-left: -45px; margin-top: -10px; font-size: smaller;">
+                <img src="assets/freezerhum.png" class="config-icon">
+                <span class="display-label">Freezer Humidity</span>
+            </div>
+        </div>
+        <div class="refrigerator-humidity">
+            <span class="number-s">16</span>
+            <span class="unit-s" style="font-family: Helvetica">&nbsp;%</span>
+            <div style="margin-left: -45px; margin-top: -10px; font-size: smaller;">
+                <img src="assets/refrigeratorhum.png" class="config-icon">
+                <span class="display-label">Reefer Humidity</span>
+            </div>
+        </div>
+        <div class="freezer-temperature">
+            <span class="number">-14</span>
+            <span class="unit" style="font-family: Helvetica">&nbsp;&#8451</span>
+            <div style="margin-left: -25px; margin-top: -35px;">
+                <img src="assets/freezer.png" class="config-icon">
+            </div>
+            <div class="display-label" style="margin-left: 20px; margin-top: 5px;">&nbsp;&nbsp;&nbsp;&nbsp;Freezer<br>Temperature</div>
+        </div>
+        <div class="room-temperature">
+            <span class="number">24</span>
+            <span class="unit" style="font-family: Helvetica">&nbsp;&#8451</span>
+            <div style="margin-left: -25px; margin-top: -35px;">
+                <img src="assets/freezer.png" class="config-icon">
+            </div>
+            <div class="display-label" style="margin-left: 5px; margin-top: 5px;">&nbsp;&nbsp;&nbsp;&nbsp;Room<br>Temperature</div>
+        </div>
+        <div class="center-align">
+            <img>
+            <span>冷冻温度</span>
+        </div>
+        <div class="food-display-container">
+            <div class="food-row">
+                <div class="food-item">
+                    <img src="assets/meat.png" class="food-icon">
+                    <div class="food-quantity">
+                        <div class="quantity-bar-1"></div>
+                        <div class="quantity-bar-2"></div>
+                        <div class="quantity-bar-3"></div>
+                        <div class="quantity-bar-4"></div>
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="assets/orange.png" class="food-icon">
+                    <div class="food-quantity">
+                        <div class="quantity-bar-1"></div>
+                        <div class="quantity-bar-2"></div>
+                        <div class="quantity-bar-3"></div>                        
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="assets/grapes.png" class="food-icon">
+                    <div class="food-quantity">
+                        <div class="quantity-bar-1"></div>
+                        <div class="quantity-bar-2"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="food-row">
+                <div class="food-item">
+                    <img src="assets/grapes.png" class="food-icon">
+                    <div class="food-quantity">
+                        <div class="quantity-bar-1"></div>
+                        <div class="quantity-bar-2"></div>
+                        <div class="quantity-bar-3"></div>                        
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="assets/watermelon.png" class="food-icon" style="width:40px;margin-left:-10px;">
+                    <div class="food-quantity">
+                        <div class="quantity-bar-1"></div>
+                        <div class="quantity-bar-2"></div>
+                        <div class="quantity-bar-3"></div>
+                        <div class="quantity-bar-4"></div>
+                    </div>
+                </div>
+                <div class="food-item">
+                    <img src="assets/meat.png" class="food-icon">
+                    <div class="food-quantity">
+                        <div class="quantity-bar-1"></div>
+                        <div class="quantity-bar-2"></div>
+                        <div class="quantity-bar-3"></div>
+                        </div>
+                </div>
+            </div>
+        </div>
+        <div class="swipe-for-settings" onclick="document.getElementById('display').style.zIndex = 0">
+            Swipe for settings
+        </div>
+    </div>
+    <div id="change-configuration" class="main">
+        <div id="refrigerator-config" class="center-align temperature-carousel">
+            <span class="refrigerator-temperature-small"
+                  onclick="updateRefrigeratorTemperature(-2)">2</span>
+            <span class="refrigerator-temperature-medium"
+                  onclick="updateRefrigeratorTemperature(-1)">3</span>
+            <span class="refrigerator-temperature-large">4</span>
+            <span style="vertical-align: top; margin-left: 10px; font-family: Helvetica">&#8451</span>
+            <span class="refrigerator-temperature-medium" 
+                  onclick="updateRefrigeratorTemperature(1)">5</span>
+            <span class="refrigerator-temperature-small"
+                  onclick="updateRefrigeratorTemperature(2)">6</span>
+        </div>
+        <div id="refrigerator-temperature-label" class="center-align">
+            <img src="assets/refrigerator.png" class="icon" style="height: 24px; width: 24px;">
+            <span style="margin-left: 12px;">Reefer Temperature<span>
+        </div>
+        <div id="freezer-config" class="center-align temperature-carousel">
+            <span class="freezing-temperature-small"
+                  onclick="updateFreezerTemperature(-2)">16</span>
+            <span class="freezing-temperature-medium"
+                  onclick="updateFreezerTemperature(-1)">15</span>
+            <span class="freezing-temperature-large">-14</span>
+            <span style="vertical-align: top; margin-left: 10px; font-family: Helvetica">&#8451</span>
+            <span class="freezing-temperature-medium"
+                  onclick="updateFreezerTemperature(1)">13</span>
+            <span class="freezing-temperature-small"
+                  onclick="updateFreezerTemperature(2)">12</span>
+        </div>
+        <div id="freezing-temperature-label" class="center-align">
+            <img src="assets/freezer.png" class="icon" style="height: 24px; width: 24px;">
+            <span style="margin-left: 12px;">Freezer Temperature<span>
+        </div>
+        <div id="freezing" class="button" onclick="alert('急冷: Fast Chill')">
+            <img src="assets/freezing.png" class="icon">
+            <span class="button-text">Fast Chill</span>
+        </div>
+        <div id="ice-making" class="button" onclick="alert('制冰: Make Ice')">
+            <img src="assets/icemaking.png" class="icon">
+            <span class="button-text">Make Ice</span>
+        </div>
+        <div id="sanitizing" class="button" onclick="alert('消毒: Sanitize')">
+            <img src="assets/sanitizing.png" class="icon">
+            <span class="button-text">Sanitize</span>
+        </div>
+        <div class="swipe-for-settings" onclick="document.getElementById('display').style.zIndex = 1">
+            Swipe to return
+        </div>
+    </div>
+</body>
+</html>
